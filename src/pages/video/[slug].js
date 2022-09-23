@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { gql, GraphQLClient } from "graphql-request";
-import Link from "next/link";
-import Image from "next/image";
+import { useState } from "react"
+import { gql, GraphQLClient } from "graphql-request"
+import Link from "next/link"
+import Image from "next/image"
 
 export const getServerSideProps = async (pageContext) => {
-  const url = process.env.ENDPOINT;
+  const url = process.env.NEXT_PUBLIC_ENDPOINT
   const graphQLClient = new GraphQLClient(url, {
     headers: {
-      Authorization: `Bearer ${process.env.GRAPH_CMS_TOKEN}`,
+      Authorization: `Bearer ${process.env.NEXT_PUBLIC_GRAPH_CMS_TOKEN}`,
     },
-  });
-  const pageSlug = pageContext.query.slug;
+  })
+  const pageSlug = pageContext.query.slug
 
   const query = gql`
     query ($pageSlug: String!) {
@@ -30,20 +30,20 @@ export const getServerSideProps = async (pageContext) => {
         }
       }
     }
-  `;
+  `
   const variables = {
     pageSlug,
-  };
+  }
 
-  const data = await graphQLClient.request(query, variables);
-  const video = data.video;
+  const data = await graphQLClient.request(query, variables)
+  const video = data.video
 
   return {
     props: {
       video,
     },
-  };
-};
+  }
+}
 
 const changeToSeen = async (slug) => {
   await fetch("/api/seen", {
@@ -52,11 +52,11 @@ const changeToSeen = async (slug) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ slug }),
-  });
-};
+  })
+}
 
 const Video = ({ video }) => {
-  const [watching, setWatching] = useState(false);
+  const [watching, setWatching] = useState(false)
   return (
     <div>
       {!watching && (
@@ -79,8 +79,8 @@ const Video = ({ video }) => {
           <button
             className="video-overlay"
             onClick={() => {
-              watching ? setWatching(false) : setWatching(true);
-              changeToSeen(video.slug);
+              watching ? setWatching(false) : setWatching(true)
+              changeToSeen(video.slug)
             }}>
             Play
           </button>
@@ -95,7 +95,7 @@ const Video = ({ video }) => {
         className="info-footer"
         onClick={() => (watching ? setWatching(false) : null)}></div>
     </div>
-  );
-};
+  )
+}
 
-export default Video;
+export default Video

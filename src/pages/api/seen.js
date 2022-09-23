@@ -1,11 +1,11 @@
-import { GraphQLClient } from "graphql-request";
+import { GraphQLClient } from "graphql-request"
 
 export default async ({ body }, res) => {
-  const graphcms = new GraphQLClient(process.env.ENDPOINT, {
+  const graphcms = new GraphQLClient(process.env.NEXT_PUBLIC_ENDPOINT, {
     headers: {
-      Authorization: `Bearer ${process.env.GRAPH_CMS_TOKEN}`,
+      Authorization: `Bearer ${process.env.NEXT_PUBLIC_GRAPH_CMS_TOKEN}`,
     },
-  });
+  })
 
   await graphcms.request(
     `mutation($slug: String!){
@@ -21,7 +21,7 @@ export default async ({ body }, res) => {
     
     `,
     { slug: body.slug }
-  );
+  )
 
   await graphcms.request(
     `mutation publishVideo($slug: String){
@@ -30,7 +30,7 @@ export default async ({ body }, res) => {
         }
     }`,
     { slug: body.slug }
-  );
+  )
 
-  res.status(201).json({ slug: body.slug });
-};
+  res.status(201).json({ slug: body.slug })
+}
