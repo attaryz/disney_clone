@@ -2,9 +2,11 @@ import { useState } from "react"
 import { gql, GraphQLClient } from "graphql-request"
 import Link from "next/link"
 import Image from "next/image"
+import { GetServerSideProps } from "next"
+import { ISection } from "pages"
 
-export const getServerSideProps = async (pageContext) => {
-  const url = process.env.NEXT_PUBLIC_ENDPOINT
+export const getServerSideProps: GetServerSideProps = async (pageContext) => {
+  const url: string = process.env.NEXT_PUBLIC_ENDPOINT as string
   const graphQLClient = new GraphQLClient(url, {
     headers: {
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_GRAPH_CMS_TOKEN}`,
@@ -36,7 +38,7 @@ export const getServerSideProps = async (pageContext) => {
   }
 
   const data = await graphQLClient.request(query, variables)
-  const video = data.video
+  const video: ISection = data.video
 
   return {
     props: {
@@ -45,7 +47,7 @@ export const getServerSideProps = async (pageContext) => {
   }
 }
 
-const changeToSeen = async (slug) => {
+const changeToSeen = async (slug: ISection) => {
   await fetch("/api/seen", {
     method: "POST",
     headers: {
@@ -55,7 +57,7 @@ const changeToSeen = async (slug) => {
   })
 }
 
-const Video = ({ video }) => {
+const Video = ({ video }: any) => {
   const [watching, setWatching] = useState(false)
   return (
     <div>

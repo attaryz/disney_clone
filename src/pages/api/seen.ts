@@ -1,7 +1,8 @@
 import { GraphQLClient } from "graphql-request"
 
-export default async ({ body }, res) => {
-  const graphcms = new GraphQLClient(process.env.NEXT_PUBLIC_ENDPOINT, {
+export default async ({ body }: any, res: any) => {
+  const endpoint: string = process.env.NEXT_PUBLIC_ENDPOINT as string
+  const graphcms = new GraphQLClient(endpoint, {
     headers: {
       Authorization: `Bearer ${process.env.NEXT_PUBLIC_GRAPH_CMS_TOKEN}`,
     },

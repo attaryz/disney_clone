@@ -1,28 +1,33 @@
 import React from "react"
 import { gql, GraphQLClient } from "graphql-request"
-import Navbar from "../components/Navbar"
-import Section from "../components/Section"
+import Navbar from "components/Navbar"
+import Section from "components/Section"
+import { GetStaticProps } from "next"
+import Image from "next/image"
 
 export interface ISection {
   title: string
-  videos: {
+  videos: Array<{
     id: string
     slug: string
-    // video: string
-    thumbnail: string
-  }[]
+    tags: string
+    thumbnail: {
+      url: string
+    }
+    seen: boolean
+  }>
 }
 
-const Home = ({ videos, account }) => {
-  const random = (videos) => {
+const Home = ({ videos }: ISection, account: any) => {
+  const random: any = ({ videos }: ISection) => {
     return videos[Math.floor(Math.random() * videos.length)]
   }
 
-  const filterVideo = (videos, genre) => {
+  const filterVideo: any = ({ videos }: ISection, genre: string) => {
     return videos.filter((video) => video.tags.includes(genre))
   }
 
-  const unseenVideos = (videos) => {
+  const unseenVideos: any = ({ videos }: ISection) => {
     return videos.filter((video) => video.seen == false || video.seen == null)
   }
   const section = [
@@ -52,7 +57,10 @@ const Home = ({ videos, account }) => {
       <Navbar account={account} />
       <div className="flex flex-col items-center justify-center w-full bg-black">
         <div className="flex flex-row justify-center w-2/4">
-          {/* <img src={random(videos).thumbnail.url} alt={random(videos).title} /> */}
+          <Image
+            src={random(videos).thumbnail.url}
+            alt={random(videos).title}
+          />
         </div>
         <div className="flex flex-col ">
           {section.map((section: ISection) => (
@@ -69,7 +77,7 @@ const Home = ({ videos, account }) => {
 }
 export default Home
 
-export const getStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async (context) => {
   const url: string = process.env.NEXT_PUBLIC_ENDPOINT as string
   const graphQLClient = new GraphQLClient(url, {
     headers: {
